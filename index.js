@@ -21,6 +21,7 @@ app.use(require('./utils/session'));
 // Routes
 app.use('/api', userRoutes);
 app.use('/api', postRoutes);
+app.use('/api', require('./routes/category.routes'));
 
 // app.get('/',auth ,(req, res) => {
 //     res.json({ message: `Welcome to the Blog API ${req.user.role}`, user: req.user });
