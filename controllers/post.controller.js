@@ -5,7 +5,11 @@ const Comment = require('../models/Comments.model');
 const Likes = require('../models/Liks.model');
 const { body, validationResult } = require('express-validator');
 const multer = require('multer');
+const sendMail = require('../utils/mail.service');
+const dotenv = require('dotenv');
 const fs = require('fs');
+
+dotenv.config();
 
 const multerStorage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -70,6 +74,18 @@ exports.createPost = async (req, res) => {
         });
 
         await post.save();
+
+        const mailOptions = {
+            from: process.env.GMAIL_USER,
+            to: 'wasayitdik@gmail.com',
+            subject: 'New Post Created',
+            text: `Your post titled "${post.title}" has been created successfully!`
+        };
+
+        await sendMail.sendMail(mailOptions);
+        // await sendMail(mailOptions);
+        
+
         res.status(201).json(post);
 
     } catch (err) {
